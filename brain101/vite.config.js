@@ -4,7 +4,7 @@ import { resolve } from "path";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./",
+  base: "/llm101/brain101/",
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
