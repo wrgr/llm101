@@ -1,7 +1,12 @@
 import React from "react";
-import { DATASETS, VOLUME_SIZES, ANALYSIS_TYPES } from "../utils/datasets.js";
+import { DATASETS, VOLUME_SIZES, ANALYSIS_TYPES, SCENARIOS } from "../utils/datasets.js";
 
-export default function GoalForm({ formState, setFormState, onSubmit, loading, apiKey }) {
+const ACCESS_BADGE = {
+  public: { label: "No auth needed", color: "#10b981" },
+  free_token: { label: "Free token", color: "#f59e0b" },
+};
+
+export default function GoalForm({ formState, setFormState, onSubmit, loading, apiKey, onScenarioSelect, activeScenario }) {
   const { goal, dataset, datasetCustom, volumeSize, volumeCustom, analysisType, analysisCustom } =
     formState;
 
@@ -10,6 +15,13 @@ export default function GoalForm({ formState, setFormState, onSubmit, loading, a
   }
 
   const canSubmit = apiKey && goal.trim() && !loading;
+
+  function handleScenarioChange(e) {
+    const id = e.target.value;
+    if (!id) return;
+    const scenario = SCENARIOS.find((s) => s.id === id);
+    if (scenario) onScenarioSelect(scenario);
+  }
 
   return (
     <form
@@ -20,6 +32,50 @@ export default function GoalForm({ formState, setFormState, onSubmit, loading, a
       }}
     >
       <h2 className="form-heading">Define Your Analysis</h2>
+
+      {/* Pre-configured scenarios */}
+      <div className="form-group scenario-group">
+        <label className="form-label" htmlFor="scenario">
+          Quick Start — Pre-configured Scenario
+        </label>
+        <select id="scenario" className="select-field" defaultValue="" onChange={handleScenarioChange}>
+          <option value="">— choose a scenario or fill in below —</option>
+          {SCENARIOS.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+        <p className="field-hint scenario-hint">
+          Selecting a scenario pre-fills the form with verified working connection details.
+        </p>
+      </div>
+
+      {/* Show active scenario info */}
+      {activeScenario && (() => {
+        const badge = ACCESS_BADGE[activeScenario.accessLevel];
+        return (
+          <div className="scenario-active-card">
+            <div className="scenario-active-header">
+              {badge && (
+                <span
+                  className="access-badge"
+                  style={{
+                    background: badge.color + "22",
+                    color: badge.color,
+                    borderColor: badge.color + "55",
+                  }}
+                >
+                  {badge.label}
+                </span>
+              )}
+            </div>
+            <p className="scenario-description">{activeScenario.description}</p>
+          </div>
+        );
+      })()}
+
+      <div className="form-divider"><span>or define your own</span></div>
 
       {/* Research goal */}
       <div className="form-group">

@@ -45,6 +45,7 @@ export async function generateConnectomicsAnalysis({
   volumeCustom,
   analysisType,
   analysisCustom,
+  technicalContext = "",  // verified working code scaffold injected by scenarios
 }) {
   const datasetLabel =
     dataset === "other" ? `Custom dataset: ${datasetCustom}` : dataset;
@@ -55,16 +56,20 @@ export async function generateConnectomicsAnalysis({
       ? `Custom analysis: ${analysisCustom}`
       : analysisType;
 
+  const contextBlock = technicalContext.trim()
+    ? `\n\nVERIFIED TECHNICAL SCAFFOLD (use these exact connection details — do not invent alternatives):\n${technicalContext.trim()}`
+    : "";
+
   const userPrompt = `
 Research goal: ${goal}
 
 Dataset: ${datasetLabel}
 Volume size: ${sizeLabel}
-Analysis type: ${analysisLabel}
+Analysis type: ${analysisLabel}${contextBlock}
 
 Please generate a complete analysis plan with Python code and Jupyter notebook cells for this connectomics task.
-The code should be directly runnable after the user fills in their authentication credentials.
-Include at least: an install/import cell, an authentication cell, the main analysis cells, and a visualization cell.
+${technicalContext ? "Build your code around the verified scaffold above — use the exact imports, endpoints, and example IDs provided." : "The code should be directly runnable after the user fills in their authentication credentials."}
+Include at least: an install/import cell, an authentication/connection cell, the main analysis cells, and a visualization cell.
 `.trim();
 
   const response = await fetch(`${GEMINI_URL}?key=${apiKey}`, {

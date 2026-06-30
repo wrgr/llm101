@@ -21,16 +21,28 @@ const DEFAULT_FORM = {
 export default function App() {
   const [apiKey, setApiKey] = useState("");
   const [formState, setFormState] = useState(DEFAULT_FORM);
+  const [activeScenario, setActiveScenario] = useState(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  function handleScenarioSelect(scenario) {
+    setActiveScenario(scenario);
+    setFormState((s) => ({ ...s, ...scenario.form }));
+    setResult(null);
+    setError(null);
+  }
 
   async function handleSubmit() {
     setLoading(true);
     setError(null);
     setResult(null);
     try {
-      const data = await generateConnectomicsAnalysis({ apiKey, ...formState });
+      const data = await generateConnectomicsAnalysis({
+        apiKey,
+        ...formState,
+        technicalContext: activeScenario?.technicalContext || "",
+      });
       // Inject a neuroglancer URL from our dataset list if Gemini didn't return one
       if (!data.neuroglancerUrl) {
         data.neuroglancerUrl = buildNeuroglancerUrl(formState.dataset);
@@ -67,6 +79,8 @@ export default function App() {
             onSubmit={handleSubmit}
             loading={loading}
             apiKey={apiKey}
+            onScenarioSelect={handleScenarioSelect}
+            activeScenario={activeScenario}
           />
         </aside>
         <main className="right-panel">
