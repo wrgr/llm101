@@ -10,17 +10,44 @@ import PedagogyTab from './components/PedagogyTab.jsx'
 import GlossaryPopover from './components/GlossaryPopover.jsx'
 import './index.css'
 
+function MobileDrawer({ open, onClose, children }) {
+  return (
+    <>
+      <div
+        className={`mobile-drawer-backdrop${open ? ' open' : ''}`}
+        onClick={onClose}
+      />
+      <div className={`mobile-drawer${open ? ' open' : ''}`}>
+        <button className="mobile-drawer-close" onClick={onClose} aria-label="Close menu">✕</button>
+        {children}
+      </div>
+    </>
+  )
+}
+
 export default function App() {
   const [level, setLevel] = useState(1)
   const [activeModule, setActiveModule] = useState('introduction')
   const [activeTab, setActiveTab] = useState('content')
   const [arcFilter, setArcFilter] = useState('all')
   const [popover, setPopover] = useState(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const activeModuleData = modules.find(m => m.slug === activeModule)
 
   const handleTermClick = (key, event) => {
     setPopover({ term: key, x: event.clientX, y: event.clientY })
+  }
+
+  const selectModule = (slug) => {
+    setActiveModule(slug)
+    setActiveTab('content')
+    setDrawerOpen(false)
+  }
+
+  const selectTab = (tab) => {
+    setActiveTab(tab)
+    setDrawerOpen(false)
   }
 
   return (
@@ -32,7 +59,7 @@ export default function App() {
             <button
               key={tab}
               className={`topbar-tab${activeTab === tab ? ' active' : ''}`}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => selectTab(tab)}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -44,7 +71,7 @@ export default function App() {
         <Sidebar
           modules={modules}
           activeModule={activeModule}
-          setActiveModule={(slug) => { setActiveModule(slug); setActiveTab('content') }}
+          setActiveModule={selectModule}
           arcFilter={arcFilter}
           setArcFilter={setArcFilter}
         />
@@ -66,14 +93,53 @@ export default function App() {
               </div>
             </>
           )}
-          {activeTab === 'reference' && (
-            <ReferenceTab modules={modules} />
-          )}
-          {activeTab === 'pedagogy' && (
-            <PedagogyTab />
-          )}
+          {activeTab === 'reference' && <ReferenceTab modules={modules} />}
+          {activeTab === 'pedagogy' && <PedagogyTab />}
         </div>
       </div>
+
+      {/* Mobile: drawer for sidebar */}
+      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <Sidebar
+          modules={modules}
+          activeModule={activeModule}
+          setActiveModule={selectModule}
+          arcFilter={arcFilter}
+          setArcFilter={setArcFilter}
+        />
+      </MobileDrawer>
+
+      {/* Mobile: bottom nav bar */}
+      <nav className="mobile-nav" role="navigation">
+        <button
+          className={`mobile-nav-btn${drawerOpen ? ' active' : ''}`}
+          onClick={() => setDrawerOpen(o => !o)}
+        >
+          <span className="mobile-nav-icon">☰</span>
+          Modules
+        </button>
+        <button
+          className={`mobile-nav-btn${activeTab === 'content' && !drawerOpen ? ' active' : ''}`}
+          onClick={() => selectTab('content')}
+        >
+          <span className="mobile-nav-icon">✦</span>
+          Content
+        </button>
+        <button
+          className={`mobile-nav-btn${activeTab === 'reference' && !drawerOpen ? ' active' : ''}`}
+          onClick={() => selectTab('reference')}
+        >
+          <span className="mobile-nav-icon">⊞</span>
+          Reference
+        </button>
+        <button
+          className={`mobile-nav-btn${activeTab === 'pedagogy' && !drawerOpen ? ' active' : ''}`}
+          onClick={() => selectTab('pedagogy')}
+        >
+          <span className="mobile-nav-icon">∿</span>
+          Pedagogy
+        </button>
+      </nav>
 
       {popover && (
         <GlossaryPopover
