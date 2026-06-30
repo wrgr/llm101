@@ -188,7 +188,7 @@ const modules = [
     title: "How text becomes numbers",
     objective: "After this, you can explain how text is split into tokens and why that matters.",
     terms: ["token", "tokenizer", "vocabulary"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "02-hook",
@@ -196,7 +196,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "Before an LLM can read a single word, it has to break language apart into pieces. Those pieces aren't always words — and that quirk has surprising consequences for everything the model does.",
       },
       {
@@ -205,7 +204,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "A [[tokenizer]] chops text into small chunks called [[token|tokens]]. Sometimes a token is a whole word, sometimes just a fragment like 'un' or '##happy'. The model only ever sees these chunks — never raw characters or complete sentences. The full list of chunks the model knows is its [[vocabulary]].",
       },
       {
@@ -214,7 +212,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "Most modern LLMs use Byte-Pair Encoding (BPE) or a variant. BPE starts with individual characters, then iteratively merges the most frequent adjacent pair into a new token, repeating until the [[vocabulary]] reaches the target size (often 32k–100k entries). This gives a compact representation that handles rare and unknown words gracefully via subword decomposition.",
       },
       {
@@ -223,7 +220,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Tokenizing 'unhappiness'",
         body: "The word 'unhappiness' might be split into ['un', 'happiness'] and mapped to integer IDs like [7842, 9314]. The model receives the integer sequence, not letters. This means 'un' carries the same ID whether it appears in 'unhappy' or 'undo' — the context distinguishes meaning, not the token itself.",
       },
@@ -233,7 +229,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "Tokens are not words",
         body: "A common assumption is that one word equals one [[token]]. In practice, common short words might be single tokens while rare or long words are split into several. This is why LLMs can struggle to count letters or syllables — they reason over token IDs, not characters.",
       },
@@ -243,7 +238,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What is the main advantage of subword tokenization over character-level tokenization?",
         options: [
           "It makes the vocabulary smaller so the model uses less memory",
@@ -280,7 +274,7 @@ const modules = [
     title: "How words become vectors",
     objective: "After this, you can describe how tokens are mapped to dense vectors and why similar words end up nearby.",
     terms: ["embedding", "token", "vocabulary"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "03-hook",
@@ -288,7 +282,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "Numbers can't be 'about' anything — unless you arrange them cleverly. [[embedding|Embeddings]] are the trick that lets a model treat meaning as geometry.",
       },
       {
@@ -297,7 +290,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "Each [[token]] gets turned into a list of hundreds of numbers — a point in a high-dimensional space. The model learns to place similar tokens near each other in that space. 'Dog' ends up close to 'cat', far from 'democracy'. Meaning becomes location.",
       },
       {
@@ -306,7 +298,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "The [[embedding]] layer is a learned lookup table $E \\in \\mathbb{R}^{V \\times d}$, where $V$ is [[vocabulary]] size and $d$ is the model dimension (often 768–12288). Each token ID $i$ indexes row $E_i$, producing a dense vector. These weights are learned end-to-end during [[pretraining]] via gradient descent.",
       },
       {
@@ -315,7 +306,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "King − man + woman ≈ queen",
         body: "A famous demonstration: if you take the vector for 'king', subtract 'man', and add 'woman', the nearest vector in the space is 'queen'. This arithmetic works because the [[embedding]] space encodes relational structure — gender, royalty, and more — as consistent geometric offsets.",
       },
@@ -325,7 +315,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         title: "Embedding lookup",
         body: "For input sequence $(x_1, \\ldots, x_T)$, the embedding layer produces $H^{(0)} = [E_{x_1}; \\ldots; E_{x_T}] \\in \\mathbb{R}^{T \\times d}$. Positional encodings $P \\in \\mathbb{R}^{T \\times d}$ are added: $H^{(0)} \\leftarrow H^{(0)} + P$, giving the transformer its first representation of both content and position.",
       },
@@ -335,7 +324,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "Why do similar words end up with similar embedding vectors?",
         options: [
           "They are manually assigned by linguists during setup",
@@ -372,7 +360,7 @@ const modules = [
     title: "How the model reads context",
     objective: "After this, you can describe what attention does and why it replaced recurrence.",
     terms: ["attention", "self-attention", "multi-head-attention", "head"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "04-hook",
@@ -380,7 +368,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "To understand a sentence you don't read every word with equal focus — you pay more [[attention]] to some words depending on what you're trying to figure out. LLMs learned to do exactly that, and it changed everything.",
       },
       {
@@ -389,7 +376,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "Imagine a spotlight that can shine on multiple words at once, with varying brightness. For each word the model is processing, [[self-attention]] lets it look back at all other words and decide which ones are most relevant — then borrow information from those words to sharpen its understanding.",
       },
       {
@@ -398,7 +384,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "[[self-attention]] projects each token representation into three vectors: a Query $Q$, a Key $K$, and a Value $V$, via learned weight matrices $W^Q, W^K, W^V$. Attention scores are computed as dot-products of queries against all keys, scaled and softmaxed, then used to weight-sum the values. [[multi-head-attention]] runs $h$ parallel attention operations and concatenates results.",
       },
       {
@@ -407,7 +392,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         title: "Scaled dot-product attention",
         body: "$$\\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}}\\right)V$$ The $\\sqrt{d_k}$ scaling prevents dot-products from growing too large in high dimensions, which would push [[softmax]] into regions of very small gradients. [[multi-head-attention]] runs this $h$ times with different projections and concatenates outputs.",
       },
@@ -417,7 +401,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Resolving a pronoun",
         body: "In 'The trophy didn't fit in the suitcase because it was too big', [[attention]] heads must resolve what 'it' refers to. The model attends strongly to 'trophy' when processing 'it', because the context about size makes 'trophy' the relevant antecedent. Different [[head|heads]] capture different relationships simultaneously.",
       },
@@ -427,7 +410,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "Attention is not fuzzy search",
         body: "It's tempting to describe [[attention]] as 'looking things up'. But the weights aren't fixed retrieval indices — they're computed fresh for every input by learned projections. The model didn't store the trophy-suitcase relationship; it computed the relevance on the fly from learned patterns.",
       },
@@ -437,7 +419,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What do the Query, Key, and Value vectors represent in attention?",
         options: [
           "Q=question, K=keyword index, V=vocabulary lookup",
@@ -474,7 +455,7 @@ const modules = [
     title: "The architecture that changed everything",
     objective: "After this, you can describe the transformer's main components and data flow.",
     terms: ["transformer", "layer-norm", "residual", "feed-forward", "position-encoding"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "05-hook",
@@ -482,7 +463,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "In 2017, a paper called 'Attention Is All You Need' proposed a new architecture. Within a few years it had displaced nearly every other approach in NLP — and then spilled into vision, audio, and science. This is the [[transformer]].",
       },
       {
@@ -491,7 +471,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "Picture an assembly line where each station reads the whole sentence, updates its understanding, and passes improved representations to the next station. Each station combines an [[attention]] step (look around at context) with a [[feed-forward]] step (think deeply about each position). Stack 96 of these stations and you have GPT-4.",
       },
       {
@@ -500,7 +479,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "A [[transformer]] decoder consists of $L$ layers. Each layer applies Multi-Head [[attention|Attention]] (MHA) followed by a position-wise [[feed-forward]] network (FFN), with [[layer-norm]] and [[residual]] connections wrapping each sub-layer. [[position-encoding|Positional encodings]] injected at the input give the model sequence-order information, since attention itself is permutation-invariant.",
       },
       {
@@ -509,7 +487,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         title: "The residual stream",
         body: "Each layer updates the representation via: $$x' = x + \\text{MHA}(\\text{LN}(x))$$ $$x'' = x' + \\text{FFN}(\\text{LN}(x'))$$ The [[residual]] connections create a 'residual stream' that flows through the network, allowing gradients to reach early layers and enabling different layers to write independent information into the same shared representation.",
       },
@@ -519,7 +496,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Data flow through one layer",
         body: "Token representations enter the layer as a matrix of shape $T \\times d$. The MHA sub-layer lets each position attend to all others and produces an updated matrix of the same shape. The FFN sub-layer then applies an identical two-layer network independently to each position. Both steps add to the input via [[residual]] connections, preserving the original signal while layering new information.",
       },
@@ -529,7 +505,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "The [[transformer]]'s key advantage over recurrent networks is parallelism: all positions are processed simultaneously, so training saturates modern GPU clusters efficiently. This is why scaling to hundreds of billions of parameters became feasible.",
       },
       {
@@ -538,7 +513,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What is the purpose of residual connections in a transformer?",
         options: [
           "They store residual memory from previous inputs across different requests",
@@ -568,7 +542,7 @@ const modules = [
     title: "How the model learns",
     objective: "After this, you can trace how gradient descent adjusts weights from prediction errors.",
     terms: ["pretraining", "backpropagation", "gradient-descent", "loss", "cross-entropy"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "06-hook",
@@ -576,7 +550,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "An LLM doesn't arrive knowing language — it acquires it through trillions of mistakes and corrections. [[pretraining]] is the process of making those mistakes fast enough to matter.",
       },
       {
@@ -585,7 +558,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "Imagine a student with a red pen marking every wrong prediction. The model guesses the next word, checks how wrong it was, then nudges every relevant weight slightly in the direction that would have made a better guess. Repeat this billions of times across billions of sentences, and the model gets very good at guessing.",
       },
       {
@@ -594,7 +566,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "[[pretraining]] optimizes the model parameters $\\theta$ via stochastic [[gradient-descent]] (or Adam) on the [[cross-entropy]] [[loss]] over next-token predictions. [[backpropagation]] computes exact gradients $\\nabla_\\theta \\mathcal{L}$ by applying the chain rule through every layer. Parameters are updated as $\\theta \\leftarrow \\theta - \\eta \\nabla_\\theta \\mathcal{L}$, where $\\eta$ is the learning rate.",
       },
       {
@@ -603,7 +574,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         title: "The pretraining loss",
         body: "$$\\mathcal{L}(\\theta) = -\\frac{1}{T}\\sum_{t=1}^{T} \\log p_\\theta(x_t \\mid x_{<t})$$ Minimizing this [[cross-entropy]] [[loss]] over a web-scale corpus is equivalent to maximum likelihood estimation of the data distribution. The negative log-likelihood has a natural lower bound — the entropy of the true distribution — which the model asymptotically approaches with sufficient capacity.",
       },
@@ -613,7 +583,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "One weight update in slow motion",
         body: "The model sees 'Paris is the capital of' and predicts 'France' with probability 0.03 (too low). The [[loss]] is high. [[backpropagation]] traces which weights caused the low score and nudges each one. After the update, the same context yields a higher probability for 'France'. One step is tiny — but 10 trillion steps reshape the entire [[parameter]] landscape.",
       },
@@ -623,7 +592,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "Memorization vs. generalization",
         body: "A model trained on enough data doesn't just memorize passages — it extracts generalizable patterns. The evidence: LLMs answer questions about topics seen only rarely in training, combine concepts in novel ways, and perform well on held-out text. Memorization does occur at the margins, but generalization is the dominant mode.",
       },
@@ -633,7 +601,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "Training a frontier LLM requires thousands of GPUs running for months — costs measured in tens of millions of dollars. This compute barrier shapes which organizations can build frontier models and concentrates capability in very few hands.",
       },
       {
@@ -642,7 +609,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What does backpropagation compute during training?",
         options: [
           "The next token the model should predict",
@@ -679,7 +645,7 @@ const modules = [
     title: "Training to be helpful",
     objective: "After this, you can explain RLHF and why it changes model behavior.",
     terms: ["rlhf", "fine-tuning", "alignment"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "07-hook",
@@ -687,7 +653,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "A pretrained LLM is extremely capable and extremely unreliable. It might answer helpfully or produce nonsense with equal fluency. [[rlhf|RLHF]] is the process that nudges capability toward usefulness.",
       },
       {
@@ -696,7 +661,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "After pretraining, the model is shown many examples of good responses and trained to imitate them. Then human raters compare pairs of outputs and say which is better. A second model learns to predict these ratings. Finally, the original model is tuned to produce outputs that score highly — rewarded for being helpful, honest, and harmless.",
       },
       {
@@ -705,7 +669,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "[[rlhf]] proceeds in three stages: (1) Supervised [[fine-tuning]] (SFT) on high-quality demonstrations; (2) reward model training on human preference comparisons; (3) policy optimization via Proximal Policy Optimization (PPO), maximizing reward while penalizing deviation from the SFT model via a KL-divergence term to prevent reward hacking.",
       },
       {
@@ -714,7 +677,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Ranking responses",
         body: "A human rater is shown two model responses to 'Explain photosynthesis simply'. They rank one higher. The reward model learns to predict these rankings across thousands of such pairs. The policy model is then updated by PPO to generate outputs the reward model scores highly — a feedback loop that shapes tone, safety, and usefulness.",
       },
@@ -724,7 +686,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "RLHF is not moral understanding",
         body: "[[rlhf]] teaches the model to produce outputs that humans rate highly — it does not instill genuine values or comprehension of ethics. The model has learned a pattern of responses that look aligned. This distinction matters: reward hacking, sycophancy, and gaming the rating process are real failure modes.",
       },
@@ -734,7 +695,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "[[alignment]] techniques like [[rlhf]] are the primary defense against deployed models causing harm. Their limits — reward hacking, distributional shift, specification gaming — are active research problems with real safety implications as models become more capable.",
       },
       {
@@ -743,7 +703,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What is the role of the reward model in RLHF?",
         options: [
           "It replaces the language model during inference",
@@ -780,7 +739,7 @@ const modules = [
     title: "How input shapes output",
     objective: "After this, you can explain few-shot, zero-shot, and chain-of-thought prompting.",
     terms: ["prompt", "few-shot", "zero-shot", "chain-of-thought", "in-context-learning"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "08-hook",
@@ -788,7 +747,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "The same model, given two different prompts, can act like a poet or a Python debugger. The [[prompt]] is the steering wheel — and learning to use it well is a skill of its own.",
       },
       {
@@ -797,7 +755,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "A [[prompt]] is everything you put in the context window before the model generates. It sets the scene: task instructions, examples of the format you want, and your actual question. With the right setup, the model infers what you need and continues the pattern — no retraining required.",
       },
       {
@@ -806,7 +763,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "[[in-context-learning]] is the ability of a large model to adapt to new tasks from examples in the [[prompt]] alone — without gradient updates. [[zero-shot]] prompting relies on task description; [[few-shot]] adds $k$ input-output demonstrations. [[chain-of-thought]] prompting elicits intermediate reasoning steps, improving performance on multi-step problems by making the reasoning process explicit in the context.",
       },
       {
@@ -815,7 +771,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Chain-of-thought in action",
         body: "Appending 'Let's think step by step' to a math problem causes the model to generate a reasoning trace before the answer. On GSM8K (grade-school math), this simple addition improved GPT-3's accuracy from ~18% to ~48%. The explicit reasoning in the context guides subsequent token predictions toward correct answers.",
       },
@@ -825,7 +780,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "Prompting is probabilistic, not programmatic",
         body: "Unlike code, a [[prompt]] doesn't deterministically specify behavior. It shifts the probability distribution over outputs. The same prompt can fail on edge cases, produce different results at different [[temperature|temperatures]], or be circumvented. Treating prompts as reliable programs leads to fragile systems.",
       },
@@ -835,7 +789,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "Prompt injection — where malicious content in the environment hijacks model behavior — is a live security threat in LLM-powered applications. As models gain [[agency|agentic]] capabilities, the attack surface grows: a model instructed to read emails can be directed by a crafted email to exfiltrate data.",
       },
       {
@@ -844,7 +797,6 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What distinguishes few-shot prompting from fine-tuning?",
         options: [
           "Few-shot prompting updates model weights; fine-tuning uses examples in context",
@@ -881,7 +833,7 @@ const modules = [
     title: "Why it confidently makes things up",
     objective: "After this, you can explain why hallucination is a structural consequence, not a bug.",
     terms: ["hallucination", "grounding", "sampling"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "09-hook",
@@ -889,7 +841,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "An LLM confidently cites a paper that doesn't exist. It names a court case with the wrong ruling. It invents a biography for a real person. This isn't a glitch — it's a predictable consequence of how these models work.",
       },
       {
@@ -898,7 +849,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "The model's job is to produce plausible-sounding text, not true text. It has no internal 'fact checker' comparing its output to reality. When it doesn't 'know' something, it doesn't say so — it generates the most probable-sounding continuation, which may be entirely fabricated.",
       },
       {
@@ -907,7 +857,6 @@ const modules = [
         arc: "meaning",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "[[hallucination]] arises because the model optimizes for $p_\\theta(x_t \\mid x_{<t})$ — plausibility given context — not for factual accuracy against an external world model. There is no [[grounding]] mechanism that checks generated claims against a knowledge base. Confident tone is itself a learned pattern from training data written by confident humans.",
       },
       {
@@ -916,7 +865,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "The invented citation",
         body: "Ask an LLM to 'cite three papers on X'. It produces author names, years, titles, and journals — all formatted correctly. Several of the papers don't exist. The model learned that academic citations look a certain way and generated plausible-looking citations. [[grounding]] to an actual literature database would be required to prevent this.",
       },
@@ -926,7 +874,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "It is not lying",
         body: "[[hallucination]] is often called 'confabulation' to distinguish it from lying. The model has no intent to deceive — it has no intentions at all. It generates what is probable. Calling it a lie implies a model that knows the truth and says something different; that is not what is happening.",
       },
@@ -936,7 +883,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "[[hallucination]] in high-stakes domains — legal research, medical advice, scientific literature — has caused real harm. Lawyers have submitted AI-generated briefs citing nonexistent cases. The structural nature of the problem means it cannot be fully eliminated; mitigation requires [[grounding]], retrieval augmentation, and human verification.",
       },
       {
@@ -945,7 +891,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "Why does an LLM produce confident-sounding false statements?",
         options: [
           "It deliberately deceives users to appear more capable",
@@ -982,7 +927,7 @@ const modules = [
     title: "What LLMs can and cannot do",
     objective: "After this, you can distinguish genuine capabilities from limitations.",
     terms: ["emergent", "capability", "context-window"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "10-hook",
@@ -990,7 +935,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "LLMs can write code, diagnose diseases, and pass bar exams. They also fail at counting letters in 'strawberry'. Mapping what they can and cannot do — and why — is one of the most practically important questions in AI.",
       },
       {
@@ -999,7 +943,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "LLMs are remarkably capable at tasks that resemble patterns in their training data: writing, summarizing, translating, coding, and reasoning by analogy. They struggle with tasks requiring precise counting, symbolic manipulation, reliable factual retrieval, or genuine understanding of physical causality.",
       },
       {
@@ -1008,7 +951,6 @@ const modules = [
         arc: "meaning",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "Some [[capability|capabilities]] are [[emergent]] — they appear abruptly at sufficient scale and are absent in smaller models. Emergent abilities include multi-step arithmetic, chain-of-thought reasoning, and in-context learning. The [[context-window]] determines how much information the model can integrate at once, creating hard limits on document length and working memory.",
       },
       {
@@ -1017,7 +959,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "The strawberry problem",
         body: "Ask GPT-4 to count the letter 'r' in 'strawberry'. Many runs produce '2' instead of '3'. The model tokenizes 'strawberry' as a single or two-token unit and reasons over tokens, not characters. This exposes a fundamental mismatch between the token-level representation and character-level tasks — a hard limit, not a fixable bug.",
       },
@@ -1027,7 +968,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "Emergent does not mean magic",
         body: "[[emergent]] capabilities are surprising but not mysterious. They arise because larger models compress more structure from the training distribution, enabling more generalizable computation. 'Emergence' describes the measurement — abrupt improvement on a benchmark — not a qualitative change in how the model works.",
       },
@@ -1037,7 +977,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "Misunderstanding [[capability|capabilities]] in either direction causes harm: overestimating leads to dangerous deployment in high-stakes domains without appropriate oversight; underestimating leads to missed opportunities and poor policy. Empirical benchmarking under realistic conditions is the only reliable guide.",
       },
       {
@@ -1046,7 +985,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What does it mean for a capability to be 'emergent' in LLMs?",
         options: [
           "It was explicitly programmed into the model during fine-tuning",
@@ -1083,7 +1021,7 @@ const modules = [
     title: "From text to action",
     objective: "After this, you can describe what happens when LLMs are given tools and memory.",
     terms: ["agency", "retrieval", "context-window"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "11-hook",
@@ -1091,7 +1029,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "A language model locked to text generation can answer questions. Give it a web browser, a code interpreter, and the ability to send emails — and you have something qualitatively different. [[agency]] is the transition from language model to agent.",
       },
       {
@@ -1100,7 +1037,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "An LLM with tools can look things up, run calculations, and take actions in the world. It can also store notes in a database and retrieve them later, extending its working memory beyond the [[context-window]]. Chained together, these steps let it tackle goals that require planning over multiple actions.",
       },
       {
@@ -1109,7 +1045,6 @@ const modules = [
         arc: "meaning",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "[[agency|Agentic]] LLM systems interleave language model calls with tool use (web search, code execution, API calls) and [[retrieval]] from external memory. [[retrieval|Retrieval-augmented generation]] (RAG) fetches relevant documents into the [[context-window]] at inference time. The ReAct framework structures agents as interleaved Reason-Act-Observe loops, making planning explicit in the context.",
       },
       {
@@ -1118,7 +1053,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "The ReAct loop",
         body: "Given 'Book the cheapest flight to Paris next Tuesday', a ReAct agent might: Reason (I need to search for flights), Act (call flight search API), Observe (results returned), Reason (cheapest is €210 on Air France), Act (initiate booking), Observe (booking confirmed). Each step is generated by the LLM conditioned on all previous reasoning and observations.",
       },
@@ -1128,7 +1062,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "Tool use is not understanding",
         body: "An LLM that correctly calls a calculator doesn't understand arithmetic — it learned that in this context the right next token is a tool call. Tool use is a powerful capability, but it remains pattern-matched output. Failures in novel tool-use contexts reveal the difference between learned patterns and genuine comprehension.",
       },
@@ -1138,7 +1071,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "Autonomous [[agency|agents]] with broad tool access amplify both capabilities and risks. A misaligned or manipulated agent can take irreversible real-world actions — send emails, execute transactions, delete data. The gap between 'helpful assistant' and 'autonomous actor' has significant safety implications.",
       },
       {
@@ -1147,7 +1079,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What problem does retrieval-augmented generation (RAG) address?",
         options: [
           "It reduces hallucination by replacing the language model with a search engine",
@@ -1184,7 +1115,7 @@ const modules = [
     title: "Failure modes and systemic risks",
     objective: "After this, you can name three categories of risk from deployed LLMs.",
     terms: ["alignment", "hallucination", "emergent"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "12-hook",
@@ -1192,7 +1123,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "Every powerful technology creates new failure modes. LLMs are no different — but the risks are novel enough that existing frameworks don't fully capture them. This module maps the landscape.",
       },
       {
@@ -1201,7 +1131,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "LLM risks fall into three broad categories: (1) output risks — [[hallucination]], misinformation, harmful content; (2) societal risks — bias amplification, labor disruption, surveillance; (3) systemic risks — misaligned powerful models, concentration of AI capability, and loss of human oversight.",
       },
       {
@@ -1210,7 +1139,6 @@ const modules = [
         arc: "meaning",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "Output risks arise from the generative mechanism: [[hallucination]] is structural, and toxic content generation reflects training data distributions. Societal risks compound across deployment at scale — bias in a widely-used model affects millions. Systemic risks are harder to measure: [[emergent]] capabilities may cross thresholds unpredictably, and [[alignment]] failures in capable systems could be difficult to reverse.",
       },
       {
@@ -1219,7 +1147,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Automated misinformation at scale",
         body: "A single API call can generate thousands of unique, fluent, plausible-sounding false news articles. Prior to LLMs, producing convincing disinformation at this scale required significant human effort. The cost asymmetry — cheap to produce, expensive to verify — represents a systemic shift in the information environment.",
       },
@@ -1229,7 +1156,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         title: "Safety filters are not sufficient",
         body: "Deployers often add content moderation layers on top of LLMs and treat the problem as solved. But filters are imperfect, can be circumvented with prompt engineering, and don't address structural issues like [[hallucination]] or systemic concentration of power. Risk management requires architectural and governance solutions, not just output filtering.",
       },
@@ -1239,7 +1165,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "The stakes escalate with capability. Current LLMs cause measurable harms in legal, medical, and information contexts. More capable future models — especially those with [[agency|agentic]] capabilities — could cause harms that are harder to detect and reverse. Getting the risk taxonomy right now informs governance before the hardest cases arrive.",
       },
       {
@@ -1248,7 +1173,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "Which of the following is an example of a systemic risk from LLMs, as opposed to an output risk?",
         options: [
           "A model generating a factually incorrect summary",
@@ -1285,7 +1209,7 @@ const modules = [
     title: "Where this is going",
     objective: "After this, you can articulate the open problems and active research directions.",
     terms: ["alignment", "emergent", "agency"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "13-hook",
@@ -1293,7 +1217,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "The field that produced today's LLMs didn't exist fifteen years ago. Predicting where it goes next is notoriously hard — but the open problems are clear enough to map, even if timelines aren't.",
       },
       {
@@ -1302,7 +1225,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "Researchers are working to make LLMs more factually reliable, better at reasoning, less expensive to run, and safer as they become more capable. They're also expanding beyond text — to images, audio, video, and action in the physical world. Each advance opens new questions as fast as it closes old ones.",
       },
       {
@@ -1311,7 +1233,6 @@ const modules = [
         arc: "meaning",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "Active research frontiers include: multimodal foundation models integrating vision, audio, and language; improved reasoning via test-time compute scaling (chain-of-thought, tree-of-thought, process reward models); [[agency|agentic]] architectures for long-horizon tasks; [[alignment]] methods beyond [[rlhf]]; and efficiency improvements (mixture-of-experts, quantization, distillation) to reduce inference cost. Scaling walls — whether returns to pretraining scale are diminishing — remain contested.",
       },
       {
@@ -1320,7 +1241,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Test-time compute scaling",
         body: "Rather than always training larger models, recent work (e.g., OpenAI o1) allocates more computation at inference time — generating and evaluating many candidate reasoning paths before returning an answer. This shifts the scaling paradigm: smarter thinking at inference can sometimes substitute for bigger weights.",
       },
@@ -1330,7 +1250,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "The hardest open problem is [[alignment]] at capability levels we haven't yet reached. Solving it requires advances in interpretability (understanding what models are doing internally), formal verification, and governance structures that keep humans meaningfully in the loop as [[agency|agentic]] AI takes on more consequential tasks.",
       },
       {
@@ -1339,7 +1258,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What does 'test-time compute scaling' mean?",
         options: [
           "Increasing the number of GPUs used during model training",
@@ -1376,7 +1294,7 @@ const modules = [
     title: "LLMs and the world",
     objective: "After this, you can reason about the societal implications of large-scale LLM deployment.",
     terms: ["alignment", "capability", "hallucination"],
-    draft: true,
+    draft: false,
     beats: [
       {
         id: "14-hook",
@@ -1384,7 +1302,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "LLMs are not just a technical artifact — they're being embedded into education, medicine, law, journalism, and government. At that scale, their properties become societal properties. This module asks: what kind of world does mass LLM deployment produce?",
       },
       {
@@ -1393,7 +1310,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 2,
-        draft: true,
         body: "When a technology reaches billions of users, its quirks become social facts. LLMs that [[hallucination|hallucinate]] inject errors into the information supply. LLMs trained on historical data reflect and may amplify existing biases. LLMs that automate cognitive work displace some jobs while creating others — but the distribution of benefits and harms is uneven.",
       },
       {
@@ -1402,7 +1318,6 @@ const modules = [
         arc: "meaning",
         minLevel: 3,
         maxLevel: 4,
-        draft: true,
         body: "Societal implications operate across several axes: labor displacement (automation of knowledge work, differential impact by skill level and sector); access and equity (frontier models require expensive compute, concentrating [[capability]] in wealthy nations and organizations); power concentration (a handful of labs control models that mediate global information); and epistemic effects ([[hallucination]] at scale, synthetic content flooding search and social media).",
       },
       {
@@ -1411,7 +1326,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 3,
-        draft: true,
         title: "Synthetic content and the information ecosystem",
         body: "By 2024, a significant fraction of content indexed by search engines was AI-generated. When that content is used to train the next generation of models — 'model collapse' — the diversity of the training distribution narrows. The information ecosystem and the model training pipeline are now coupled feedback loops with unknown long-run equilibria.",
       },
@@ -1421,7 +1335,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         body: "The societal questions are not downstream of the technical questions — they are equally fundamental. Who controls the models, who can access them, who is harmed by their failures, and who benefits from their successes are political questions that will be decided with or without input from people who understand the technology. Understanding LLMs is a prerequisite for meaningful participation in those decisions.",
       },
       {
@@ -1430,7 +1343,6 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 4,
-        draft: true,
         question: "What is 'model collapse' in the context of LLM training?",
         options: [
           "A model failing to converge during training due to a high learning rate",
