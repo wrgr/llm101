@@ -1,0 +1,81 @@
+export const DATASETS = [
+  {
+    id: "flywire",
+    label: "FlyWire (Drosophila full brain)",
+    species: "Drosophila melanogaster",
+    server: "https://globalv1.flywire-daf.com",
+    neuroglancerUrl: "https://ngl.flywire.ai/",
+    client: "caveclient",
+    info: "CAVE-based, ~130,000 neurons, synapse tables available",
+  },
+  {
+    id: "microns",
+    label: "MICrONS (Mouse V1 cortex)",
+    species: "Mus musculus",
+    server: "https://minnie.microns-daf.com",
+    neuroglancerUrl: "https://ngl.microns-explorer.org/",
+    client: "caveclient",
+    info: "CAVE-based, 200 TB EM volume, >70,000 neurons",
+  },
+  {
+    id: "h01",
+    label: "H01 (Human cortex 1 mm³)",
+    species: "Homo sapiens",
+    server: "https://h01-dot-neuroglancer-demo.appspot.com",
+    neuroglancerUrl: "https://h01-dot-neuroglancer-demo.appspot.com/#!",
+    client: "cloudvolume",
+    info: "Google / Lichtman lab, first large human EM sample",
+  },
+  {
+    id: "fafb",
+    label: "FAFB (Full Adult Fly Brain)",
+    species: "Drosophila melanogaster",
+    server: "https://neuropil.janelia.org/tracing/fafb/v14",
+    neuroglancerUrl: "https://neuropil.janelia.org/tracing/fafb/v14-seg/",
+    client: "dvid",
+    info: "DVID-based, Janelia Research Campus, CATMAID annotations",
+  },
+  {
+    id: "hemibrain",
+    label: "Hemibrain (Fly hemibrain)",
+    species: "Drosophila melanogaster",
+    server: "https://neuprint.janelia.org",
+    neuroglancerUrl: "https://neuprint.janelia.org",
+    client: "neuprint-python",
+    info: "NeuPrint / DVID, ~25,000 neurons, dense reconstruction",
+  },
+  {
+    id: "bossdb",
+    label: "BossDB (Open datasets)",
+    species: "Various",
+    server: "https://api.bossdb.io",
+    neuroglancerUrl: "",
+    client: "intern",
+    info: "Open BossDB repository — multiple species and modalities",
+  },
+  {
+    id: "other",
+    label: "Other (specify below)",
+    species: "",
+    server: "",
+    neuroglancerUrl: "",
+    client: "cloudvolume",
+    info: "Provide a custom CloudVolume / DVID / CAVE server URL",
+  },
+];
+
+export const VOLUME_SIZES = [
+  { id: "small", label: "Small  (~1 µm³)", value: "1", unit: "µm³" },
+  { id: "medium", label: "Medium (~10 µm³)", value: "10", unit: "µm³" },
+  { id: "large", label: "Large  (~100 µm³)", value: "100", unit: "µm³" },
+  { id: "custom", label: "Custom (specify)", value: "", unit: "" },
+];
+
+export const ANALYSIS_TYPES = [
+  { id: "cell_type", label: "Cell type classification" },
+  { id: "synapse", label: "Synapse detection & mapping" },
+  { id: "connectivity", label: "Connectivity / circuit tracing" },
+  { id: "morphology", label: "Morphology analysis" },
+  { id: "proofreading", label: "Proofreading & error detection" },
+  { id: "custom", label: "Custom (describe below)" },
+];
