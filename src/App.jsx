@@ -26,26 +26,17 @@ export default function App() {
   return (
     <div className="app">
       <div className="topbar">
-        <h1>How LLMs actually work</h1>
-        <div className="tab-bar">
-          <button
-            className={activeTab === 'content' ? 'active' : ''}
-            onClick={() => setActiveTab('content')}
-          >
-            Content
-          </button>
-          <button
-            className={activeTab === 'reference' ? 'active' : ''}
-            onClick={() => setActiveTab('reference')}
-          >
-            Reference
-          </button>
-          <button
-            className={activeTab === 'pedagogy' ? 'active' : ''}
-            onClick={() => setActiveTab('pedagogy')}
-          >
-            Pedagogy
-          </button>
+        <div className="topbar-title">How <span>LLMs</span> actually work</div>
+        <div className="topbar-tabs">
+          {['content', 'reference', 'pedagogy'].map(tab => (
+            <button
+              key={tab}
+              className={`topbar-tab${activeTab === tab ? ' active' : ''}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -53,21 +44,27 @@ export default function App() {
         <Sidebar
           modules={modules}
           activeModule={activeModule}
-          setActiveModule={setActiveModule}
+          setActiveModule={(slug) => { setActiveModule(slug); setActiveTab('content') }}
           arcFilter={arcFilter}
           setArcFilter={setArcFilter}
         />
 
         <div className="content-col">
           {activeTab === 'content' && (
-            <div className="level-area">
-              <LevelSlider level={level} setLevel={setLevel} />
-              <ModuleView
-                module={activeModuleData}
-                level={level}
-                onTermClick={handleTermClick}
-              />
-            </div>
+            <>
+              <div className="level-area">
+                <LevelSlider level={level} setLevel={setLevel} />
+              </div>
+              <div className="content">
+                <div className="content-inner">
+                  <ModuleView
+                    module={activeModuleData}
+                    level={level}
+                    onTermClick={handleTermClick}
+                  />
+                </div>
+              </div>
+            </>
           )}
           {activeTab === 'reference' && (
             <ReferenceTab modules={modules} />

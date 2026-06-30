@@ -1,55 +1,40 @@
-import React from 'react';
-
 export default function Sidebar({ modules, activeModule, setActiveModule, arcFilter, setArcFilter }) {
-  const mechanisticModules = modules.filter(m => m.arc === 'mechanistic');
-  const meaningModules = modules.filter(m => m.arc === 'meaning');
+  const mechanistic = modules.filter(m => m.arc === 'mechanistic')
+  const meaning = modules.filter(m => m.arc === 'meaning')
+  const showMech = arcFilter === 'all' || arcFilter === 'mechanistic'
+  const showMean = arcFilter === 'all' || arcFilter === 'meaning'
 
-  const showMechanistic = arcFilter === 'all' || arcFilter === 'mechanistic';
-  const showMeaning = arcFilter === 'all' || arcFilter === 'meaning';
+  const NavItem = ({ module }) => (
+    <div
+      className={`nav-item${module.slug === activeModule ? ' active' : ''}`}
+      onClick={() => setActiveModule(module.slug)}
+    >
+      <span className="nav-item-num">{module.num}</span>
+      {module.tab}
+    </div>
+  )
 
   return (
     <div className="sidebar">
       <div className="arc-filter">
-        <button onClick={() => setArcFilter('all')} className={arcFilter === 'all' ? 'active' : ''}>
-          All
-        </button>
-        <button onClick={() => setArcFilter('mechanistic')} className={arcFilter === 'mechanistic' ? 'active' : ''}>
-          How it works
-        </button>
-        <button onClick={() => setArcFilter('meaning')} className={arcFilter === 'meaning' ? 'active' : ''}>
-          What it means
-        </button>
+        <button className={`arc-btn${arcFilter === 'all' ? ' active' : ''}`} onClick={() => setArcFilter('all')}>All</button>
+        <button className={`arc-btn${arcFilter === 'mechanistic' ? ' active' : ''}`} onClick={() => setArcFilter('mechanistic')}>Mechanism</button>
+        <button className={`arc-btn${arcFilter === 'meaning' ? ' active' : ''}`} onClick={() => setArcFilter('meaning')}>Meaning</button>
       </div>
 
-      {showMechanistic && (
-        <div>
+      {showMech && (
+        <div className="arc-group">
           <div className="arc-header">How it works</div>
-          {mechanisticModules.map(module => (
-            <div
-              key={module.slug}
-              className={`nav-item${module.slug === activeModule ? ' active' : ''}`}
-              onClick={() => setActiveModule(module.slug)}
-            >
-              {module.tab}{module.draft && <span> (draft)</span>}
-            </div>
-          ))}
+          {mechanistic.map(m => <NavItem key={m.slug} module={m} />)}
         </div>
       )}
 
-      {showMeaning && (
-        <div>
+      {showMean && (
+        <div className="arc-group">
           <div className="arc-header">What it means</div>
-          {meaningModules.map(module => (
-            <div
-              key={module.slug}
-              className={`nav-item${module.slug === activeModule ? ' active' : ''}`}
-              onClick={() => setActiveModule(module.slug)}
-            >
-              {module.tab}{module.draft && <span> (draft)</span>}
-            </div>
-          ))}
+          {meaning.map(m => <NavItem key={m.slug} module={m} />)}
         </div>
       )}
     </div>
-  );
+  )
 }

@@ -1,26 +1,25 @@
-import pedagogy from '../data/pedagogy.js';
+import pedagogy from '../data/pedagogy.js'
 
 export default function PedagogyTab() {
   return (
-    <div>
-      <h2>Design rationale</h2>
-      <p>This explainer applies evidence-based learning science principles.</p>
-
-      {pedagogy.map((item) => (
-        <div className="topic-group" key={item.principle}>
-          <h3 className="topic-label">{item.principle}</h3>
-          <p><strong>{item.claim}</strong></p>
-          <p>{item.rationale}</p>
-          <ul>
-            {item.sources.map((s) => (
-              <li className="source-item" key={s.link}>
+    <div className="ped-content">
+      <h2 className="section-title">Design rationale</h2>
+      <p className="section-subtitle">Evidence-based learning science principles behind this explainer.</p>
+      {pedagogy.map(item => (
+        <div className="ped-principle" key={item.principle}>
+          <div className="ped-principle-name">{item.principle}</div>
+          <div className="ped-claim">{item.claim}</div>
+          <div className="ped-rationale">{item.rationale}</div>
+          <div className="ped-sources">
+            {(item.sources || []).map((s, i) => (
+              <div className="ped-source" key={i}>
                 {s.authors} ({s.year}). <em>{s.title}</em>. {s.venue}.{' '}
-                <a href={s.link} target="_blank" rel="noreferrer">{s.link}</a>
-              </li>
+                {s.link && <a href={s.link} target="_blank" rel="noreferrer" style={{color:'var(--accent)'}}>↗</a>}
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       ))}
     </div>
-  );
+  )
 }

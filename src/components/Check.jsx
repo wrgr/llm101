@@ -5,6 +5,7 @@ export default function Check({ beat }) {
 
   return (
     <div className="check-box">
+      <div className="check-label">Check your understanding</div>
       <div className="check-question">{beat.question}</div>
       <div className="check-options">
         {beat.options.map((opt, i) => (
@@ -15,6 +16,7 @@ export default function Check({ beat }) {
               (selected === i && i === beat.answer ? " correct" : "") +
               (selected === i && i !== beat.answer ? " wrong" : "")
             }
+            disabled={selected !== null}
             onClick={() => { if (selected === null) setSelected(i); }}
           >
             {opt}

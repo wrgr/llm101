@@ -1,139 +1,67 @@
-import { useState } from 'react';
-import pedagogy from '../data/pedagogy.js';
+import { useState } from 'react'
+import pedagogy from '../data/pedagogy.js'
 
 const TOPIC_GROUPS = [
-  {
-    key: 'language-modeling',
-    topic: 'Language modeling & scale',
-    moduleNums: ['00', '01', '06'],
-  },
-  {
-    key: 'architecture',
-    topic: 'Architecture',
-    moduleNums: ['02', '03', '04', '05'],
-  },
-  {
-    key: 'alignment',
-    topic: 'Alignment & prompting',
-    moduleNums: ['07', '08'],
-  },
-  {
-    key: 'meaning-arc',
-    topic: 'Meaning arc',
-    moduleNums: ['09', '10', '11', '12', '13', '14'],
-  },
-  {
-    key: 'pedagogy',
-    topic: 'Pedagogy & design',
-    moduleNums: null, // special: from pedagogy data
-  },
-];
+  { key: 'language-modeling', topic: 'Language modeling & scale', moduleNums: ['00', '01', '06'] },
+  { key: 'architecture', topic: 'Architecture', moduleNums: ['02', '03', '04', '05'] },
+  { key: 'alignment', topic: 'Alignment & prompting', moduleNums: ['07', '08'] },
+  { key: 'meaning-arc', topic: 'Meaning arc', moduleNums: ['09', '10', '11', '12', '13', '14'] },
+  { key: 'pedagogy', topic: 'Pedagogy & design', moduleNums: null },
+]
 
-function deduplicate(sources) {
-  const seen = new Set();
-  return sources.filter((s) => {
-    const key = `${s.title}||${s.year}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+function dedupe(sources) {
+  const seen = new Set()
+  return sources.filter(s => {
+    const k = `${s.title}||${s.year}`
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
 }
 
-function getPedagogySources() {
-  const sources = [];
-  for (const entry of pedagogy) {
-    if (Array.isArray(entry.sources)) {
-      sources.push(...entry.sources);
-    }
-  }
-  return deduplicate(sources);
-}
-
-function getGroupSources(group, modules) {
+function groupSources(group, modules) {
   if (group.moduleNums === null) {
-    return getPedagogySources();
+    return dedupe(pedagogy.flatMap(p => p.sources || []))
   }
-  const sources = [];
-  for (const mod of modules) {
-    if (group.moduleNums.includes(mod.num) && Array.isArray(mod.sources)) {
-      sources.push(...mod.sources);
-    }
-  }
-  return deduplicate(sources);
+  return dedupe(
+    modules.filter(m => group.moduleNums.includes(m.num)).flatMap(m => m.sources || [])
+  )
 }
 
 function SourceItem({ source }) {
   return (
-    <li className="source-item">
-      <span className="source-authors">
-        {source.authors} ({source.year}).{' '}
-      </span>
-      <span className="source-title">{source.title}. </span>
-      <span className="source-venue">{source.venue}.</span>
-      {source.link && (
-        <>
-          {' '}
-          <a
-            className="source-link"
-            href={source.link}
-            target="_blank"
-            rel="noreferrer"
-          >
-            ↗
-          </a>
-        </>
-      )}
-    </li>
-  );
-}
-
-function TopicGroup({ group, modules }) {
-  const sources = getGroupSources(group, modules);
-  if (sources.length === 0) return null;
-  return (
-    <div className="topic-group">
-      <h3 className="topic-label">{group.topic}</h3>
-      <ul>
-        {sources.map((source, i) => (
-          <SourceItem key={`${source.title}-${source.year}-${i}`} source={source} />
-        ))}
-      </ul>
+    <div className="source-item">
+      <div className="source-dot" />
+      <div className="source-body">
+        <span className="source-authors">{source.authors} ({source.year}). </span>
+        <span className="source-title">{source.title}. </span>
+        <span className="source-venue">{source.venue}.</span>
+        {source.link && (
+          <a className="source-link" href={source.link} target="_blank" rel="noreferrer">↗</a>
+        )}
+      </div>
     </div>
-  );
+  )
 }
 
 export default function ReferenceTab({ modules }) {
-  const [activeGroup, setActiveGroup] = useState('all');
-
-  const visibleGroups =
-    activeGroup === 'all'
-      ? TOPIC_GROUPS
-      : TOPIC_GROUPS.filter((g) => g.key === activeGroup);
+  const [activeGroup, setActiveGroup] = useState('all')
+  const visible = activeGroup === 'all' ? TOPIC_GROUPS : TOPIC_GROUPS.filter(g => g.key === activeGroup)
 
   return (
-    <div className="reference-tab">
-      <div className="reference-filter">
-        <button
-          className={activeGroup === 'all' ? 'active' : ''}
-          onClick={() => setActiveGroup('all')}
-        >
-          All
-        </button>
-        {TOPIC_GROUPS.map((g) => (
-          <button
-            key={g.key}
-            className={activeGroup === g.key ? 'active' : ''}
-            onClick={() => setActiveGroup(g.key)}
-          >
-            {g.topic}
-          </button>
-        ))}
-      </div>
-      <div className="reference-list">
-        {visibleGroups.map((group) => (
-          <TopicGroup key={group.key} group={group} modules={modules} />
-        ))}
-      </div>
+    <div className="ref-content">
+      <h2 className="section-title">References</h2>
+      <p className="section-subtitle">Primary sources for each arc, plus pedagogy & design citations.</p>
+      {visible.map(group => {
+        const sources = groupSources(group, modules)
+        if (!sources.length) return null
+        return (
+          <div className="topic-group" key={group.key}>
+            <div className="topic-label">{group.topic}</div>
+            {sources.map((s, i) => <SourceItem key={i} source={s} />)}
+          </div>
+        )
+      })}
     </div>
-  );
+  )
 }
