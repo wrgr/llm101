@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import modules from './data/modules.js'
-import LEVELS from './data/levels.js'
+import { LEVELS } from './data/levels.js'
 import glossary from './data/glossary.js'
 import LevelSlider from './components/LevelSlider.jsx'
 import Sidebar from './components/Sidebar.jsx'
