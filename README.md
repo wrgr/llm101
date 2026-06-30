@@ -9,7 +9,7 @@ This repository is a **working architecture with one fully-authored module**
 (01, *Prediction*). The remaining modules are correctly-structured scaffolds
 with objectives, tags, and citations in place, ready to be authored in Claude
 Code. See `AUTHORING.md`.
-
+ 
 ## Run it
 
 ```bash
