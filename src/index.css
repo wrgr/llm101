@@ -750,9 +750,10 @@ body {
   background: rgba(0, 0, 0, 0.65);
   z-index: 40;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.2s;
 }
-.mobile-drawer-backdrop.open { opacity: 1; }
+.mobile-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
 
 .mobile-drawer {
   position: fixed;
@@ -769,16 +770,23 @@ body {
 .mobile-drawer.open { transform: translateX(0); }
 
 .mobile-drawer-close {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: none;
-  border: none;
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.6rem 0.75rem;
+  background: var(--sb-bg);
+  border-bottom: 1px solid var(--sb-border);
+  z-index: 1;
+  /* reset button defaults */
+  width: 100%;
+  border-left: none;
+  border-right: none;
+  border-top: none;
   color: #9090b0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   cursor: pointer;
-  padding: 0.25rem 0.4rem;
-  border-radius: 4px;
   line-height: 1;
 }
 .mobile-drawer-close:hover { color: #e8e8f8; }
@@ -839,6 +847,11 @@ body {
   .content { padding: 1.25rem 1rem 5rem; }
   .ref-content, .ped-content { padding: 1.25rem 1rem 5rem; }
   .level-area { padding: 0.75rem 1rem; }
+
+  /* level slider: keep name + audience on one line, clamp overflow */
+  .level-row { gap: 0.5rem; }
+  .level-name { font-size: 0.75rem; white-space: nowrap; }
+  .level-audience { font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .module-title { font-size: 1.2rem; }
   .beat { font-size: 0.9rem; }
