@@ -23,7 +23,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "An LLM is like a very well-read autocomplete — trained on billions of sentences until it got eerily good at guessing what comes next.",
+        body: "A computer read almost every book, website, and story ever written. Then it practised guessing the next word — over and over, billions of times. Now it's very good at finishing sentences. That's really all it does.",
       },
       {
         id: "00-explain-plain",
@@ -109,7 +109,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "Imagine a machine that only ever asks one question: given everything it's just read, what's the single most natural next word?",
+        body: "Every time the computer writes a word, it asks: what word would most likely come next? Then it picks one, asks again, picks again — all the way to the end. It's like a really fast game of word-after-word.",
       },
       {
         id: "01-explain-plain",
@@ -220,7 +220,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "Before the model can read anything, a pre-processing step chops your text into small chunks — sometimes words, sometimes syllables — and converts each chunk to a number.",
+        body: "Computers can't read letters — they only understand numbers. So every word gets turned into a number first. \"Cat\" might be 4829. \"Dog\" might be 1173. The computer works with the numbers, not the words.",
       },
       {
         id: "02-explain-plain",
@@ -323,7 +323,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "Each word becomes a list of numbers — its address in a giant semantic map where 'doctor' lives near 'nurse' and far from 'wrench'.",
+        body: "Imagine a giant map where words that mean similar things live close together. \"Happy\" and \"joyful\" are neighbours. \"Ice\" and \"cold\" are near each other. The computer uses this map to understand what words mean.",
       },
       {
         id: "03-explain-plain",
@@ -417,7 +417,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "When you read 'the bank was steep,' your eye flicks back to 'bank' to decide river or money. Attention is that flick — run automatically on every word simultaneously.",
+        body: "When you read \"I went to the river bank,\" you look back at the earlier words to figure out which kind of bank. The computer does the exact same thing — it looks back at all the words at once to understand what each one means.",
       },
       {
         id: "04-explain-plain",
@@ -529,7 +529,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "A transformer is an assembly line: each station reads the whole sentence, updates its understanding, and passes improved notes to the next. Stack 96 stations and you have GPT-4.",
+        body: "A transformer is like a team of readers passing a page around. The first reader underlines important words. The next one sees those marks and understands even more. By the time the last reader is done, they understand the whole thing very well.",
       },
       {
         id: "05-explain-plain",
@@ -633,7 +633,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "Training is like a student doing practice problems: guess the next word, check how wrong you were, adjust your thinking, repeat — trillions of times.",
+        body: "Teaching the computer is like a guessing game with millions of rounds. It guesses the next word. If it's wrong, it adjusts a tiny bit. Then it guesses again. After doing this billions of times, it gets very good.",
       },
       {
         id: "06-explain-plain",
@@ -753,7 +753,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "Pretraining makes a capable but unpredictable writer. RLHF is the editing process — human feedback shapes which outputs get rewarded until the model learns to be helpful.",
+        body: "After the computer learns to write, real people read its answers and say which ones are good and which are bad. The computer learns to write more like the good ones. It's like getting a thumbs up or thumbs down on every answer.",
       },
       {
         id: "07-explain-plain",
@@ -873,7 +873,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 0,
         maxLevel: 0,
-        body: "A prompt is a stage direction: set the scene, show the model an example or two, and it improvises the rest in character.",
+        body: "The words you give the computer at the start are like instructions to an actor before a show. If you say \"be a pirate\" and show one example, it plays the pirate all the way through. The better your instructions, the better the performance.",
       },
       {
         id: "08-explain-plain",
@@ -984,7 +984,7 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 0,
-        body: "LLMs generate plausible-sounding text, not necessarily true text. When they don't know something they don't go silent — they keep generating, and what comes out may be confident nonsense.",
+        body: "Sometimes the computer makes things up and says them very confidently — like a kid who doesn't know the answer but answers anyway. It isn't lying on purpose. It just always tries to say something, even when it doesn't really know.",
       },
       {
         id: "09-explain-plain",
@@ -1095,7 +1095,7 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 0,
-        body: "LLMs are strong at patterns — writing, coding, analogies — and weak at counting, reliable fact retrieval, and understanding physical cause-and-effect.",
+        body: "The computer is brilliant at some things — writing stories, spotting patterns, explaining ideas. But it can't count letters reliably or look things up to check if they're true. Very smart in some ways, surprisingly bad in others.",
       },
       {
         id: "10-explain-plain",
@@ -1215,7 +1215,7 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 0,
-        body: "Give an LLM a calculator, a web browser, and the ability to send emails, and you've turned a text generator into something that can act in the world.",
+        body: "On its own, the computer can only talk. But give it a calculator, the ability to search the web, or the ability to click buttons — and it can start doing things in the real world, not just answering questions.",
       },
       {
         id: "11-explain-plain",
@@ -1326,7 +1326,7 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 0,
-        body: "Every powerful tool has failure modes. LLMs can produce false information at scale, reflect human biases, and — as they gain autonomy — take actions that are hard to undo.",
+        body: "A very powerful tool can cause big problems if it goes wrong. The computer can spread wrong information, say unfair things, or — if given too much control — do things that are hard to take back.",
       },
       {
         id: "12-explain-plain",
@@ -1428,7 +1428,7 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 0,
-        body: "The open questions now aren't whether models will become more capable, but how to make that capability reliable, safe, and beneficial.",
+        body: "Scientists are working hard to make sure computers that are this powerful are also safe and honest. There's still a lot to figure out — which is why lots of very smart people are thinking about it right now.",
       },
       {
         id: "13-explain-plain",
@@ -1530,7 +1530,7 @@ const modules = [
         arc: "meaning",
         minLevel: 0,
         maxLevel: 0,
-        body: "When a technology reaches billions of users, its quirks become society's quirks. LLMs are now infrastructure — and infrastructure shapes the world.",
+        body: "Hundreds of millions of people use these computers every day. When something that big gets things wrong, or is unfair, it affects everyone. That's why it matters who builds them, who controls them, and who they help.",
       },
       {
         id: "14-explain-plain",
