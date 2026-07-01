@@ -7,6 +7,7 @@ import Sidebar from './components/Sidebar.jsx'
 import ModuleView from './components/ModuleView.jsx'
 import ReferenceTab from './components/ReferenceTab.jsx'
 import PedagogyTab from './components/PedagogyTab.jsx'
+import FurtherReadingTab from './components/FurtherReadingTab.jsx'
 import GlossaryPopover from './components/GlossaryPopover.jsx'
 import './index.css'
 
@@ -55,13 +56,13 @@ export default function App() {
       <div className="topbar">
         <div className="topbar-title">How <span>LLMs</span> actually work</div>
         <div className="topbar-tabs">
-          {['content', 'reference', 'pedagogy'].map(tab => (
+          {['content', 'reference', 'further', 'pedagogy'].map(tab => (
             <button
               key={tab}
               className={`topbar-tab${activeTab === tab ? ' active' : ''}`}
               onClick={() => selectTab(tab)}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab === 'further' ? 'Further Reading' : tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
         </div>
@@ -94,6 +95,7 @@ export default function App() {
             </>
           )}
           {activeTab === 'reference' && <ReferenceTab modules={modules} />}
+          {activeTab === 'further' && <FurtherReadingTab userLevel={level} />}
           {activeTab === 'pedagogy' && <PedagogyTab />}
         </div>
       </div>
@@ -131,6 +133,13 @@ export default function App() {
         >
           <span className="mobile-nav-icon">⊞</span>
           Reference
+        </button>
+        <button
+          className={`mobile-nav-btn${activeTab === 'further' && !drawerOpen ? ' active' : ''}`}
+          onClick={() => selectTab('further')}
+        >
+          <span className="mobile-nav-icon">↗</span>
+          Reading
         </button>
         <button
           className={`mobile-nav-btn${activeTab === 'pedagogy' && !drawerOpen ? ' active' : ''}`}
