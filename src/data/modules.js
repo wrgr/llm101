@@ -31,7 +31,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "A [[llm|large language model]] is a computer program trained on enormous amounts of text. It learned to predict what word comes next — over and over, billions of times — until it became very good at generating fluent, coherent text.",
+        body: "A [[llm|large language model]] is a computer program trained on enormous amounts of text — books, websites, code, conversations. Its only job was to predict what word comes next. After doing that billions of times, it got very good at producing text that sounds fluent and natural.",
       },
       {
         id: "00-explain-tech",
@@ -117,7 +117,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "An LLM reads your text [[token|one chunk at a time]] and produces a list of guesses for what comes next. Each chunk gets a score, and the model samples from the highest-scoring chunks. The result is one more word — then it repeats.",
+        body: "An LLM reads your text one small chunk at a time and produces a ranked list of guesses for what should come next. It picks from the top guesses (with some randomness), adds that word, then repeats the whole process. One word at a time, all the way to the end.",
       },
       {
         id: "01-explain-tech",
@@ -228,7 +228,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "A [[tokenizer]] chops text into small chunks called [[token|tokens]]. Sometimes a token is a whole word, sometimes just a fragment like 'un' or '##happy'. The model only ever sees these chunks — never raw characters or complete sentences. The full list of chunks the model knows is its [[vocabulary]].",
+        body: "A [[tokenizer]] chops text into small pieces called [[token|tokens]] — sometimes a whole word, sometimes just a fragment like 'un' or '##happy'. Each token gets converted to a number. The model only ever works with these numbers — it never sees raw letters or full sentences. The complete set of tokens it knows is called its [[vocabulary]].",
       },
       {
         id: "02-explain-tech",
@@ -331,7 +331,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "Each [[token]] gets turned into a list of hundreds of numbers — a point in a high-dimensional space. The model learns to place similar tokens near each other in that space. 'Dog' ends up close to 'cat', far from 'democracy'. Meaning becomes location.",
+        body: "Each [[token]] gets turned into a long list of numbers — like giving every word a unique address in a giant coordinate system. The model learns to place words that mean similar things near each other. 'Dog' ends up close to 'cat', far from 'democracy'. Meaning becomes position.",
       },
       {
         id: "03-explain-tech",
@@ -425,7 +425,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "Imagine a spotlight that can shine on multiple words at once, with varying brightness. For each word the model is processing, [[self-attention]] lets it look back at all other words and decide which ones are most relevant — then borrow information from those words to sharpen its understanding.",
+        body: "Imagine a spotlight that can shine on multiple words at once. For each word it is processing, [[self-attention]] lets the model look back at every other word in the sentence and decide which ones are most useful — then borrow meaning from those words to understand the current one better. This happens for every word, simultaneously.",
       },
       {
         id: "04-explain-tech",
@@ -537,7 +537,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "Picture an assembly line where each station reads the whole sentence, updates its understanding, and passes improved representations to the next station. Each station combines an [[attention]] step (look around at context) with a [[feed-forward]] step (think deeply about each position). Stack 96 of these stations and you have GPT-4.",
+        body: "Picture an assembly line where each station reads the whole sentence, updates its understanding, and passes improved notes to the next. Each station has two jobs: look around at context ([[attention]]), then think hard about each word on its own ([[feed-forward]]). Stack 96 of these stations and you get something like GPT-4.",
       },
       {
         id: "05-explain-tech",
@@ -641,7 +641,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "Imagine a student with a red pen marking every wrong prediction. The model guesses the next word, checks how wrong it was, then nudges every relevant weight slightly in the direction that would have made a better guess. Repeat this billions of times across billions of sentences, and the model gets very good at guessing.",
+        body: "Think of a student with a red pen marking every wrong answer. The model guesses the next word, checks how wrong it was, then adjusts every relevant connection slightly in the direction that would have made a better guess. Repeat this billions of times across billions of sentences, and the model gradually gets very good.",
       },
       {
         id: "06-explain-tech",
@@ -761,7 +761,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "After pretraining, the model is shown many examples of good responses and trained to imitate them. Then human raters compare pairs of outputs and say which is better. A second model learns to predict these ratings. Finally, the original model is tuned to produce outputs that score highly — rewarded for being helpful, honest, and harmless.",
+        body: "After the initial training, the model gets refined using human feedback. People read pairs of responses and pick the better one. A separate program learns to predict those ratings. Then the original model is adjusted to produce outputs that score well — pushing it toward being helpful, honest, and avoiding harm.",
       },
       {
         id: "07-explain-tech",
@@ -881,7 +881,7 @@ const modules = [
         arc: "mechanistic",
         minLevel: 1,
         maxLevel: 2,
-        body: "A [[prompt]] is everything you put in the context window before the model generates. It sets the scene: task instructions, examples of the format you want, and your actual question. With the right setup, the model infers what you need and continues the pattern — no retraining required.",
+        body: "A [[prompt]] is everything you give the model before it starts writing — task instructions, examples of the format you want, your actual question. The model reads all of it and continues the pattern. With the right setup, it can follow complex instructions, adopt a persona, or answer in a specific format — no retraining needed.",
       },
       {
         id: "08-explain-tech",
@@ -992,7 +992,7 @@ const modules = [
         arc: "meaning",
         minLevel: 1,
         maxLevel: 2,
-        body: "The model's job is to produce plausible-sounding text, not true text. It has no internal 'fact checker' comparing its output to reality. When it doesn't 'know' something, it doesn't say so — it generates the most probable-sounding continuation, which may be entirely fabricated.",
+        body: "The model's job is to produce text that sounds plausible, not text that is true. It has no built-in fact-checker comparing what it writes to reality. When it doesn't know something, it doesn't stop — it generates the most natural-sounding continuation, which can be completely made up.",
       },
       {
         id: "09-explain-tech",
@@ -1103,7 +1103,7 @@ const modules = [
         arc: "meaning",
         minLevel: 1,
         maxLevel: 2,
-        body: "LLMs are remarkably capable at tasks that resemble patterns in their training data: writing, summarizing, translating, coding, and reasoning by analogy. They struggle with tasks requiring precise counting, symbolic manipulation, reliable factual retrieval, or genuine understanding of physical causality.",
+        body: "LLMs are very good at tasks that look like patterns in their training data: writing, summarising, translating, coding, reasoning by analogy. They struggle with anything requiring careful counting, checking facts reliably, or understanding how physical things actually work.",
       },
       {
         id: "10-explain-tech",
@@ -1223,7 +1223,7 @@ const modules = [
         arc: "meaning",
         minLevel: 1,
         maxLevel: 2,
-        body: "An LLM with tools can look things up, run calculations, and take actions in the world. It can also store notes in a database and retrieve them later, extending its working memory beyond the [[context-window]]. Chained together, these steps let it tackle goals that require planning over multiple actions.",
+        body: "An LLM with tools can search the web, run code, and take actions — not just answer questions. It can also save notes and retrieve them later, giving it a kind of extended memory. Chain enough of these steps together and it can work towards a goal across many actions, not just one reply.",
       },
       {
         id: "11-explain-tech",
@@ -1334,7 +1334,7 @@ const modules = [
         arc: "meaning",
         minLevel: 1,
         maxLevel: 2,
-        body: "LLM risks fall into three broad categories: (1) output risks — [[hallucination]], misinformation, harmful content; (2) societal risks — bias amplification, labor disruption, surveillance; (3) systemic risks — misaligned powerful models, concentration of AI capability, and loss of human oversight.",
+        body: "LLM risks come in three flavours. Output risks are about what it produces — made-up information, harmful content. Social risks are about what happens at scale — reinforcing biases, disrupting jobs. Systemic risks are the biggest and hardest to see — what happens when AI systems become very powerful and humans lose the ability to check what they're doing.",
       },
       {
         id: "12-explain-tech",
@@ -1436,7 +1436,7 @@ const modules = [
         arc: "meaning",
         minLevel: 1,
         maxLevel: 2,
-        body: "Researchers are working to make LLMs more factually reliable, better at reasoning, less expensive to run, and safer as they become more capable. They're also expanding beyond text — to images, audio, video, and action in the physical world. Each advance opens new questions as fast as it closes old ones.",
+        body: "Researchers are working to make LLMs more accurate, better at reasoning, cheaper to run, and safer as they become more capable. They're also expanding beyond text — to images, audio, video, and control of physical devices. Every problem they solve tends to open new ones.",
       },
       {
         id: "13-explain-tech",
@@ -1538,7 +1538,7 @@ const modules = [
         arc: "meaning",
         minLevel: 1,
         maxLevel: 2,
-        body: "When a technology reaches billions of users, its quirks become social facts. LLMs that [[hallucination|hallucinate]] inject errors into the information supply. LLMs trained on historical data reflect and may amplify existing biases. LLMs that automate cognitive work displace some jobs while creating others — but the distribution of benefits and harms is uneven.",
+        body: "When a technology reaches billions of people, its flaws become everyone's problem. LLMs that make things up spread errors into news, search, and schoolwork. Those trained on historical data can repeat old biases. Those that automate writing and coding shift which jobs are easy and which are hard — and that shift doesn't affect everyone equally.",
       },
       {
         id: "14-explain-tech",
