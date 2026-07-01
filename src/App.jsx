@@ -8,6 +8,7 @@ import ModuleView from './components/ModuleView.jsx'
 import ReferenceTab from './components/ReferenceTab.jsx'
 import PedagogyTab from './components/PedagogyTab.jsx'
 import FurtherReadingTab from './components/FurtherReadingTab.jsx'
+import GlossaryTab from './components/GlossaryTab.jsx'
 import GlossaryPopover from './components/GlossaryPopover.jsx'
 import './index.css'
 
@@ -26,11 +27,26 @@ function MobileDrawer({ open, onClose, children }) {
   )
 }
 
+const TABS = [
+  { id: 'content',   label: 'Content' },
+  { id: 'glossary',  label: 'Glossary' },
+  { id: 'reference', label: 'References' },
+  { id: 'further',   label: 'Further Reading' },
+  { id: 'pedagogy',  label: 'Pedagogy' },
+]
+
+const MOBILE_TABS = [
+  { id: 'modules',   label: 'Modules',  icon: '☰',  drawer: true },
+  { id: 'content',   label: 'Content',  icon: '✦' },
+  { id: 'glossary',  label: 'Glossary', icon: '⊟' },
+  { id: 'reference', label: 'Refs',     icon: '⊞' },
+  { id: 'further',   label: 'Reading',  icon: '↗' },
+]
+
 export default function App() {
   const [level, setLevel] = useState(1)
   const [activeModule, setActiveModule] = useState('introduction')
   const [activeTab, setActiveTab] = useState('content')
-  const [arcFilter, setArcFilter] = useState('all')
   const [popover, setPopover] = useState(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -56,13 +72,13 @@ export default function App() {
       <div className="topbar">
         <div className="topbar-title">How <span>LLMs</span> actually work</div>
         <div className="topbar-tabs">
-          {['content', 'reference', 'further', 'pedagogy'].map(tab => (
+          {TABS.map(({ id, label }) => (
             <button
-              key={tab}
-              className={`topbar-tab${activeTab === tab ? ' active' : ''}`}
-              onClick={() => selectTab(tab)}
+              key={id}
+              className={`topbar-tab${activeTab === id ? ' active' : ''}`}
+              onClick={() => selectTab(id)}
             >
-              {tab === 'further' ? 'Further Reading' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {label}
             </button>
           ))}
         </div>
@@ -73,8 +89,6 @@ export default function App() {
           modules={modules}
           activeModule={activeModule}
           setActiveModule={selectModule}
-          arcFilter={arcFilter}
-          setArcFilter={setArcFilter}
         />
 
         <div className="content-col">
@@ -94,9 +108,10 @@ export default function App() {
               </div>
             </>
           )}
+          {activeTab === 'glossary'  && <GlossaryTab />}
           {activeTab === 'reference' && <ReferenceTab modules={modules} />}
-          {activeTab === 'further' && <FurtherReadingTab userLevel={level} />}
-          {activeTab === 'pedagogy' && <PedagogyTab />}
+          {activeTab === 'further'   && <FurtherReadingTab userLevel={level} />}
+          {activeTab === 'pedagogy'  && <PedagogyTab />}
         </div>
       </div>
 
@@ -106,8 +121,6 @@ export default function App() {
           modules={modules}
           activeModule={activeModule}
           setActiveModule={selectModule}
-          arcFilter={arcFilter}
-          setArcFilter={setArcFilter}
         />
       </MobileDrawer>
 
@@ -120,34 +133,16 @@ export default function App() {
           <span className="mobile-nav-icon">☰</span>
           Modules
         </button>
-        <button
-          className={`mobile-nav-btn${activeTab === 'content' && !drawerOpen ? ' active' : ''}`}
-          onClick={() => selectTab('content')}
-        >
-          <span className="mobile-nav-icon">✦</span>
-          Content
-        </button>
-        <button
-          className={`mobile-nav-btn${activeTab === 'reference' && !drawerOpen ? ' active' : ''}`}
-          onClick={() => selectTab('reference')}
-        >
-          <span className="mobile-nav-icon">⊞</span>
-          Reference
-        </button>
-        <button
-          className={`mobile-nav-btn${activeTab === 'further' && !drawerOpen ? ' active' : ''}`}
-          onClick={() => selectTab('further')}
-        >
-          <span className="mobile-nav-icon">↗</span>
-          Reading
-        </button>
-        <button
-          className={`mobile-nav-btn${activeTab === 'pedagogy' && !drawerOpen ? ' active' : ''}`}
-          onClick={() => selectTab('pedagogy')}
-        >
-          <span className="mobile-nav-icon">∿</span>
-          Pedagogy
-        </button>
+        {MOBILE_TABS.filter(t => !t.drawer).map(({ id, label, icon }) => (
+          <button
+            key={id}
+            className={`mobile-nav-btn${activeTab === id && !drawerOpen ? ' active' : ''}`}
+            onClick={() => selectTab(id)}
+          >
+            <span className="mobile-nav-icon">{icon}</span>
+            {label}
+          </button>
+        ))}
       </nav>
 
       {popover && (

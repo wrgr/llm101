@@ -1,8 +1,11 @@
-export default function Sidebar({ modules, activeModule, setActiveModule, arcFilter, setArcFilter }) {
+import { useState } from 'react'
+
+export default function Sidebar({ modules, activeModule, setActiveModule }) {
+  const [arcTab, setArcTab] = useState('mechanistic')
+
   const mechanistic = modules.filter(m => m.arc === 'mechanistic')
   const meaning = modules.filter(m => m.arc === 'meaning')
-  const showMech = arcFilter === 'all' || arcFilter === 'mechanistic'
-  const showMean = arcFilter === 'all' || arcFilter === 'meaning'
+  const visible = arcTab === 'mechanistic' ? mechanistic : meaning
 
   const NavItem = ({ module }) => (
     <div
@@ -16,25 +19,24 @@ export default function Sidebar({ modules, activeModule, setActiveModule, arcFil
 
   return (
     <div className="sidebar">
-      <div className="arc-filter">
-        <button className={`arc-btn${arcFilter === 'all' ? ' active' : ''}`} onClick={() => setArcFilter('all')}>All</button>
-        <button className={`arc-btn${arcFilter === 'mechanistic' ? ' active' : ''}`} onClick={() => setArcFilter('mechanistic')}>Mechanism</button>
-        <button className={`arc-btn${arcFilter === 'meaning' ? ' active' : ''}`} onClick={() => setArcFilter('meaning')}>Meaning</button>
+      <div className="sidebar-arc-tabs">
+        <button
+          className={`sidebar-arc-tab${arcTab === 'mechanistic' ? ' active' : ''}`}
+          onClick={() => setArcTab('mechanistic')}
+        >
+          How it works
+        </button>
+        <button
+          className={`sidebar-arc-tab${arcTab === 'meaning' ? ' active' : ''}`}
+          onClick={() => setArcTab('meaning')}
+        >
+          What matters
+        </button>
       </div>
 
-      {showMech && (
-        <div className="arc-group">
-          <div className="arc-header">How it works</div>
-          {mechanistic.map(m => <NavItem key={m.slug} module={m} />)}
-        </div>
-      )}
-
-      {showMean && (
-        <div className="arc-group">
-          <div className="arc-header">What it means</div>
-          {meaning.map(m => <NavItem key={m.slug} module={m} />)}
-        </div>
-      )}
+      <div className="arc-group">
+        {visible.map(m => <NavItem key={m.slug} module={m} />)}
+      </div>
     </div>
   )
 }
