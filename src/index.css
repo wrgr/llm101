@@ -832,7 +832,7 @@ body {
    --------------------------------------------------------- */
 @media (max-width: 768px) {
   .main-area { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
+  .main-area > .sidebar { display: none; }
   .mobile-drawer-backdrop { display: block; }
   .mobile-nav { display: flex; }
 
