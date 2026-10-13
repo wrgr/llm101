@@ -25,13 +25,13 @@ export default function ModuleView({ module, level, onTermClick }) {
         {module.terms && module.terms.length > 0 && (
           <div className="module-terms">
             {module.terms.map((term) => (
-              <span
+              <button type="button"
                 key={term}
                 className="term-chip"
                 onClick={(e) => onTermClick(term, e)}
               >
                 {term}
-              </span>
+              </button>
             ))}
           </div>
         )}

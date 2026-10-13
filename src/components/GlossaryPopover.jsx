@@ -1,33 +1,16 @@
-import React from "react";
-
-export default function GlossaryPopover({ term, glossary, position, onClose }) {
+/** Present glossary definitions as native dialogs with keyboard dismissal and focus return. */
+import {useEffect, useRef} from 'react';
+export default function GlossaryPopover({term, glossary, opener, onClose}) {
+  const dialog = useRef(null);
   const entry = glossary[term];
-
-  const left = Math.min(position.x + 8, window.innerWidth - 340);
-  const top = Math.min(position.y + 8, window.innerHeight - 200);
-
-  return (
-    <div className="popover-overlay" onClick={onClose}>
-      <div
-        className="popover"
-        style={{ left, top }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {entry ? (
-          <>
-            <div className="popover-term">{entry.term}</div>
-            <div className="popover-short">{entry.short}</div>
-            {entry.long && <div className="popover-long">{entry.long}</div>}
-            {entry.seeAlso?.length > 0 && (
-              <div className="popover-see-also">
-                {"See also: " + entry.seeAlso.join(", ")}
-              </div>
-            )}
-          </>
-        ) : (
-          <div>{`Term not found: ${term}`}</div>
-        )}
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    const node = dialog.current;
+    node.showModal();
+    return () => { node.close(); if (opener?.isConnected) opener.focus(); };
+  }, [opener]);
+  return <dialog ref={dialog} className="glossary-dialog" aria-labelledby="glossary-dialog-title" onCancel={onClose}>
+    <button type="button" onClick={onClose}>Close definition</button>
+    <h2 id="glossary-dialog-title">{entry?.term || term}</h2>
+    {entry ? <><p>{entry.short}</p>{entry.long && <p>{entry.long}</p>}{entry.seeAlso?.length > 0 && <p>See also: {entry.seeAlso.join(', ')}</p>}</> : <p>Definition unavailable for this term.</p>}
+  </dialog>;
 }

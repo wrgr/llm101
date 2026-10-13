@@ -24,7 +24,7 @@ export default function Check({ beat }) {
         ))}
       </div>
       {selected !== null && (
-        <div className="check-explanation">{beat.explanation}</div>
+        <div className="check-explanation" role="status">{selected === beat.answer ? "Correct. " : "Try reflecting on this explanation. "}{beat.explanation}</div>
       )}
     </div>
   );

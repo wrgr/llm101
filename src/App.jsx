@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import modules from './data/modules.js'
-import { LEVELS } from './data/levels.js'
+import {LEVELS} from './data/levels.js'
 import glossary from './data/glossary.js'
 import LevelSlider from './components/LevelSlider.jsx'
 import Sidebar from './components/Sidebar.jsx'
@@ -12,19 +12,17 @@ import GlossaryTab from './components/GlossaryTab.jsx'
 import GlossaryPopover from './components/GlossaryPopover.jsx'
 import './index.css'
 
+/** Contain menu focus and restore its opener through a native modal dialog. */
 function MobileDrawer({ open, onClose, children }) {
-  return (
-    <>
-      <div
-        className={`mobile-drawer-backdrop${open ? ' open' : ''}`}
-        onClick={onClose}
-      />
-      <div className={`mobile-drawer${open ? ' open' : ''}`}>
-        <button className="mobile-drawer-close" onClick={onClose} aria-label="Close menu">✕</button>
-        {children}
-      </div>
-    </>
-  )
+  const dialog = useRef(null)
+  useEffect(() => {
+    if (open && !dialog.current.open) dialog.current.showModal()
+    if (!open && dialog.current.open) dialog.current.close()
+  }, [open])
+  return <dialog ref={dialog} className="mobile-drawer" aria-label="Choose a learning module" onCancel={onClose}>
+    <button className="mobile-drawer-close" onClick={onClose} aria-label="Close menu">Close menu</button>
+    {children}
+  </dialog>
 }
 
 const TABS = [
@@ -41,6 +39,7 @@ const MOBILE_TABS = [
   { id: 'glossary',  label: 'Glossary', icon: '⊟' },
   { id: 'reference', label: 'Refs',     icon: '⊞' },
   { id: 'further',   label: 'Reading',  icon: '↗' },
+  { id: 'pedagogy', label: 'Pedagogy', icon: '·' },
 ]
 
 export default function App() {
@@ -53,7 +52,7 @@ export default function App() {
   const activeModuleData = modules.find(m => m.slug === activeModule)
 
   const handleTermClick = (key, event) => {
-    setPopover({ term: key, x: event.clientX, y: event.clientY })
+    setPopover({ term: key, opener: event.currentTarget })
   }
 
   const selectModule = (slug) => {
@@ -69,20 +68,21 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className="topbar">
-        <div className="topbar-title">How <span>LLMs</span> actually work</div>
-        <div className="topbar-tabs">
+      <header className="topbar">
+        <h1 className="topbar-title">How <span>LLMs</span> actually work</h1>
+        <nav className="topbar-tabs" aria-label="Explorer sections">
           {TABS.map(({ id, label }) => (
             <button
               key={id}
               className={`topbar-tab${activeTab === id ? ' active' : ''}`}
+              aria-pressed={activeTab === id}
               onClick={() => selectTab(id)}
             >
               {label}
             </button>
           ))}
-        </div>
-      </div>
+        </nav>
+      </header>
 
       <div className="main-area">
         <Sidebar
@@ -91,7 +91,8 @@ export default function App() {
           setActiveModule={selectModule}
         />
 
-        <div className="content-col">
+        <main id="learning-content" tabIndex={-1} className="content-col">
+          <p className="sr-only" role="status">Showing {activeTab === "content" ? `${activeModuleData.title}, ${LEVELS[level].name} depth` : TABS.find(t => t.id === activeTab).label}.</p>
           {activeTab === 'content' && (
             <>
               <div className="level-area">
@@ -112,7 +113,7 @@ export default function App() {
           {activeTab === 'reference' && <ReferenceTab modules={modules} />}
           {activeTab === 'further'   && <FurtherReadingTab userLevel={level} />}
           {activeTab === 'pedagogy'  && <PedagogyTab />}
-        </div>
+        </main>
       </div>
 
       {/* Mobile: drawer for sidebar */}
@@ -125,21 +126,23 @@ export default function App() {
       </MobileDrawer>
 
       {/* Mobile: bottom nav bar */}
-      <nav className="mobile-nav" role="navigation">
+      <nav className="mobile-nav" aria-label="Explorer sections on mobile">
         <button
           className={`mobile-nav-btn${drawerOpen ? ' active' : ''}`}
+          aria-expanded={drawerOpen}
           onClick={() => setDrawerOpen(o => !o)}
         >
-          <span className="mobile-nav-icon">☰</span>
+          <span className="mobile-nav-icon" aria-hidden="true">☰</span>
           Modules
         </button>
         {MOBILE_TABS.filter(t => !t.drawer).map(({ id, label, icon }) => (
           <button
             key={id}
             className={`mobile-nav-btn${activeTab === id && !drawerOpen ? ' active' : ''}`}
-            onClick={() => selectTab(id)}
+            aria-pressed={activeTab === id}
+              onClick={() => selectTab(id)}
           >
-            <span className="mobile-nav-icon">{icon}</span>
+            <span className="mobile-nav-icon" aria-hidden="true">{icon}</span>
             {label}
           </button>
         ))}
@@ -149,7 +152,7 @@ export default function App() {
         <GlossaryPopover
           term={popover.term}
           glossary={glossary}
-          position={{ x: popover.x, y: popover.y }}
+          opener={popover.opener}
           onClose={() => setPopover(null)}
         />
       )}
