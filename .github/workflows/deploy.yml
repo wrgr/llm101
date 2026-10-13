@@ -25,9 +25,10 @@ jobs:
           node-version: 20
           cache: npm
 
-      # Build llm101 (root app) → dist/
+      # Ship the retired LLM101 root as a redirect → dist/
       - run: npm ci
       - run: npm run build
+      - run: npm test
 
       # Build brain101 (sub-app) → brain101/dist/, then merge into dist/brain101/
       - run: npm ci

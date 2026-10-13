@@ -1,103 +1,13 @@
-# How LLMs actually work — a depth-adjustable explainer
+# LLM101 has moved to Capability Matters
 
-An interactive explainer for generative AI and large language models. **One
-mechanism, five views, two arcs.** A reader chooses how deep to go (from a
-single metaphor to the formal account), and the content is assembled on the fly
-from tagged segments.
+The maintained LLM101 explorer, lessons and accessibility controls are now in [wrgr/capabilitymatters](https://github.com/wrgr/capabilitymatters/tree/main/experiments/llm101), served at [capabilitymatters.org/llm101/explorer/](https://capabilitymatters.org/llm101/explorer/). The contextual learning page is [capabilitymatters.org/llm101/](https://capabilitymatters.org/llm101/).
 
-This repository is a **working architecture with one fully-authored module**
-(01, *Prediction*). The remaining modules are correctly-structured scaffolds
-with objectives, tags, and citations in place, ready to be authored in Claude
-Code. See `AUTHORING.md`.
- 
-## Run it
+This repository no longer builds or serves the old LLM101 React app. Its root GitHub Pages URL redirects to the maintained explorer, with a native link fallback. Source history is preserved at the final old release, commit `82d4c7db64593a94ead16cdcbaa32f1459fb4d2c`. Changes to LLM101 belong in Capability Matters.
 
-```bash
-npm install
-npm run dev        # local dev server
-npm run build      # production build to dist/
-npm run preview    # preview the production build
-```
+## Retained Brain101 deployment
 
-Node 18+ recommended.
+The independent `brain101/` app remains at [wrgr.github.io/llm101/brain101/](https://wrgr.github.io/llm101/brain101/). Its source and build are unchanged. Do not disable Pages or archive this repository until Brain101 has its own agreed hosting migration. Its hosting/accessibility review is tracked in [Capability Matters issue #24](https://github.com/wrgr/capabilitymatters/issues/24).
 
-## What's implemented
+## Build and release
 
-- **Five-view slider** with aligned dots/labels and full keyboard support.
-- **Sparse segment engine**: each module is an ordered set of *beats* tagged by
-  role, arc, and the view range they apply to. The "talk" at any view is just
-  the beats valid there, so novices get scaffolds and experts get the formal
-  account without re-reading.
-- **Two arcs** — *How it works* (00–08) and *What it means* (09–14) — with an
-  arc filter in the sidebar.
-- **Glossary popovers**: click any `[[term]]` for a definition; one shared
-  glossary, level-independent.
-- **KaTeX math** in formal beats (`$inline$`, `$$display$$`).
-- **Optional checks** for understanding per module (ungraded).
-- **Reference tab** organized by topic, and a **Pedagogy tab** explaining the
-  design, each with citations.
-
-## Grounding
-
-Two separate citation layers, deliberately:
-
-- **Content** (what an LLM is/does) is grounded in primary ML/NLP literature,
-  per module.
-- **Design** (five views, fading scaffolds, checks) is grounded in the learning
-  sciences — see the Pedagogy tab and the Reference tab's "Pedagogy & design"
-  section. No program-specific citations are used.
-
-> Citation metadata is **seeded** for the build. Run a verification pass
-> (Crossref / arXiv / DOI) before publishing. Mechanistic-arc sources (00–08)
-> were drawn from verified canonical papers; meaning-arc modules (09–14) list
-> *candidate* sources in code comments to verify.
-
-## Deploy to GitHub Pages
-
-`vite.config.js` uses `base: "./"` (relative paths), which works on a project
-site at `https://USER.github.io/REPO/` without further config.
-
-**Option A — one command (gh-pages branch):**
-
-```bash
-npm run deploy     # builds and pushes dist/ to the gh-pages branch
-```
-
-Then in the repo: Settings → Pages → Source: `gh-pages` branch.
-
-**Option B — GitHub Actions:** a workflow is included at
-`.github/workflows/deploy.yml`. Push to `main`, then set Settings → Pages →
-Source: *GitHub Actions*.
-
-If you deploy to a path and assets 404, set `base: "/your-repo-name/"` in
-`vite.config.js` instead of `"./"`.
-
-## Project map
-
-```
-src/
-  App.jsx                 shell: top nav, level + arc state, layout, popover host
-  index.css               design tokens, per-view accent, responsive layout
-  data/
-    levels.js             the five views, beat roles, arcs
-    glossary.js           shared term definitions ([[key]] -> popover)
-    modules.js            all 15 modules (01 authored; rest scaffolded)
-    pedagogy.js           design principles + their citations
-  components/
-    LevelSlider.jsx       aligned custom slider
-    Sidebar.jsx           arc-grouped nav + arc filter
-    ModuleView.jsx        assembles the talk from valid beats
-    Beat rendering        (inside ModuleView)
-    Check.jsx             optional question
-    GlossaryPopover.jsx   definition card
-    ReferenceTab.jsx      citations by topic
-    PedagogyTab.jsx       design rationale
-  lib/
-    markup.jsx            parses [[terms]] and $math$ in beat bodies
-```
-
-## Accessibility regression
-
-Keyboard module/depth actions use native buttons; glossary and mobile-menu dialogs contain focus, close with Escape and restore their opener. The page includes a skip link, named navigation, content/depth announcements, accessible reading preferences and responsive contrast improvements. These repairs do not constitute a WCAG conformity claim; full spoken screen-reader, cross-browser zoom and complete-criteria validation remain pending.
-
-Run `npm ci`, `npx playwright install chromium`, `npm run build`, and `npm run test:a11y`. The regression serves the production build locally and checks five Prediction depths, reading sections, glossary focus return, mobile navigation, preferences, axe A/AA rules and 320px reflow with enlarged text/spacing. `CHROME_BINARY` can select installed Chrome; `A11Y_OUTPUT` selects the evidence directory. This test does not deploy. Preferences are stored on this application's origin separately from its Capability Matters embed host.
+`npm ci`, `npm run build`, and `npm test` verify the dependency-free root redirect. The existing Pages workflow then builds Brain101 with its own package lock and copies that output into `dist/brain101/` before deployment. The old `gh-pages` deployment shortcut was removed because it could omit the companion app. Pushes to main and manual workflow runs use the combined Pages workflow.
