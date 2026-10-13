@@ -119,20 +119,13 @@ export function renderMarkup(text, onTermClick) {
       const label = display ?? (term ? term.name ?? key : key);
       const isMissing = !term;
       elements.push(
-        <span
+        <button type="button"
           key={`gloss-${segIndex}`}
           className={isMissing ? 'glossary-term missing-term' : 'glossary-term'}
-          role="button"
-          tabIndex={0}
-          onClick={() => onTermClick && onTermClick(key)}
-          onKeyDown={(e) => {
-            if ((e.key === 'Enter' || e.key === ' ') && onTermClick) {
-              onTermClick(key);
-            }
-          }}
+          onClick={(event) => onTermClick?.(key, event)}
         >
           {label}
-        </span>
+        </button>
       );
     } else {
       // text segment — parse for math

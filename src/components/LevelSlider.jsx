@@ -11,10 +11,13 @@ export default function LevelSlider({ level, setLevel }) {
       </div>
       <div className="level-dots">
         {LEVELS.map((l, i) => (
-          <div
+          <button
+            type="button"
             key={l.id}
             className={`level-dot${i === level ? ' active' : ''}`}
             data-label={l.name}
+            aria-label={`${l.name} — ${l.audience}`}
+            aria-pressed={i === level}
             onClick={() => setLevel(i)}
             title={`${l.name} — ${l.audience}`}
           />

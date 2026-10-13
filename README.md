@@ -95,3 +95,9 @@ src/
   lib/
     markup.jsx            parses [[terms]] and $math$ in beat bodies
 ```
+
+## Accessibility regression
+
+Keyboard module/depth actions use native buttons; glossary and mobile-menu dialogs contain focus, close with Escape and restore their opener. The page includes a skip link, named navigation, content/depth announcements, accessible reading preferences and responsive contrast improvements. These repairs do not constitute a WCAG conformity claim; full spoken screen-reader, cross-browser zoom and complete-criteria validation remain pending.
+
+Run `npm ci`, `npx playwright install chromium`, `npm run build`, and `npm run test:a11y`. The regression serves the production build locally and checks five Prediction depths, reading sections, glossary focus return, mobile navigation, preferences, axe A/AA rules and 320px reflow with enlarged text/spacing. `CHROME_BINARY` can select installed Chrome; `A11Y_OUTPUT` selects the evidence directory. This test does not deploy. Preferences are stored on this application's origin separately from its Capability Matters embed host.

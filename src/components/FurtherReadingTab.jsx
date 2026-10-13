@@ -18,7 +18,7 @@ const TYPE_LABELS = {
   interactive: 'Interactive',
 }
 
-const LEVEL_COLORS = ['#06b6d4', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+const LEVEL_COLORS = ['#08778c', '#08784f', '#8c5800', '#6d3eaf', '#b92929']
 
 function ResourceCard({ resource }) {
   const levelName = LEVELS[resource.minLevel]?.name ?? `Level ${resource.minLevel}`
